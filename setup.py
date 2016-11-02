@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.md')) as f:
     README = f.read()
-#with open(os.path.join(here, 'CHANGES.txt')) as f:
+# with open(os.path.join(here, 'CHANGES.txt')) as f:
 #    CHANGES = f.read()
 
 requires = [
@@ -13,7 +13,7 @@ requires = [
     ]
 
 setup(name='docopt_subcommands',
-      version='0.0',
+      version='0.1',
       description='create subcommand-based CLI programs with docopt',
       long_description=README,
       classifiers=[
