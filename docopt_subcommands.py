@@ -52,6 +52,8 @@ class Subcommands:
             available_commands='\n  '.join(sorted(commands)),
             program=program)
         self.commands = commands
+        self.commands['help'] = self._handle_help
+
         self.program = program
         self.version = version
 
@@ -71,15 +73,14 @@ class Subcommands:
                       version=self.version)
 
         command = args['<command>']
-        if command is None:
-            command = 'help'
 
         # Try to find a command handler, defaulting to 'help' if no match it
         # found.
         try:
             handler = self.commands[command]
         except KeyError:
-            handler = self._handle_help
+            print('Unrecognized command: {}\n'.format(command))
+            handler = self.commands['help']
             argv = ['help']
 
         # Parse the sub-command options
@@ -94,7 +95,7 @@ class Subcommands:
         return handler(args)
 
     def _handle_help(self, config):
-        """usage: {program} {command} [<command>]
+        """usage: {program} help [<command>]
 
         Get the top-level help, or help for <command> if specified.
         """
@@ -102,15 +103,14 @@ class Subcommands:
         if not command:
             options = self.top_level_doc
         elif command not in self.commands:
-            print('"{}}" is not a valid command', command)
             options = self.top_level_doc
         else:
-            options = self.commands[command].__doc__
+            options = self.commands[command].__doc__.format(
+                program=self.program,
+                command=command)
 
         return docopt(
-            options.format(
-                program=self.program,
-                command=command),
+            options,
             ['--help'],
             version=self.version)
 

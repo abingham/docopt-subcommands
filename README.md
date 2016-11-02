@@ -37,23 +37,66 @@ The basic idea behind `docopt-subcommands` is simple:
  4. You provide a program name, version string, and (optionally) a top-level
     documentation string.
 
-Then `docopt-subcommands` does the work of stitching everything together into a subcommand-driven program. Here's how it looks:
+Then `docopt-subcommands` does the work of stitching everything together into a
+subcommand-driven program. Here's how it looks (from the included `example.py`):
+
 ```python
 import docopt_subcommands
 
 def foo_handler(args):
-   """usage: {program} {command} <name>
+    """usage: {program} {command} <name>
 
-   Apply foo to a name.
-   """
-   print("Foo, {}".format(args['<name>']))
+    Apply foo to a name.
+    """
+    print("Foo, {}".format(args['<name>']))
 
 def bar_handler(args):
-   """usage: {program} {command} <name>
+    """usage: {program} {command} <name>
 
-   Apply bar to a name.
-   """
-   print("Bar, {}".format(args['<name>']))
+    Apply bar to a name.
+    """
+    print("Bar, {}".format(args['<name>']))
 
+COMMAND_MAP = {
+    'foo': foo_handler,
+    'bar': bar_handler
+}
 
+docopt_subcommands.main(
+    COMMAND_MAP,
+    'docopt-subcommand-example',
+    'docopt-subcommand-example v42')
+```
+
+If you run this program at the commands line you'll see that you have a nice,
+subcommand-based CLI program:
+
+```shell
+$ python example.py
+Usage: docopt-subcommand-example [options] <command> [<args> ...]
+
+$ python example.py -h
+docopt-subcommand-example
+
+Usage: docopt-subcommand-example [options] <command> [<args> ...]
+
+Options:
+  -h --help     Show this screen.
+
+Available commands:
+  bar
+  foo
+
+See 'docopt-subcommand-example help <command>' for help on specific commands.
+
+$ python example.py foo
+usage: docopt-subcommand-example foo <name>
+
+$ python example.py foo -h
+usage: docopt-subcommand-example foo <name>
+
+    Apply foo to a name.
+
+$ python example.py foo Bubba
+Foo, Bubba
 ```
