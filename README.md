@@ -23,7 +23,7 @@ git rebase
 
 is the subcommand for rebasing.
 
-`docopt` subcommands is here to help you create similar kinds of command-line
+`docopt-subcommands` is here to help you create similar kinds of command-line
 tools.
 
 ## Quickstart
