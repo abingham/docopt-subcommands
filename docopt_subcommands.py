@@ -46,16 +46,20 @@ class Subcommands:
                  program,
                  version,
                  top_level_doc=None):
-        top_level_doc = top_level_doc or DEFAULT_TOP_LEVEL_DOC
-
-        self.top_level_doc = top_level_doc.format(
-            available_commands='\n  '.join(sorted(commands)),
-            program=program)
         self.commands = commands
         self.commands['help'] = self._handle_help
-
         self.program = program
         self.version = version
+
+        top_level_doc = top_level_doc or DEFAULT_TOP_LEVEL_DOC
+        self.top_level_doc = self._format(top_level_doc)
+
+    def _format(self, string, **kwargs):
+        return string.format(
+            program=self.program,
+            version=self.version,
+            available_commands='\n  '.join(sorted(self.commands)),
+            **kwargs)
 
     def __call__(self, argv):
         """Run the subcommand processor and invoke the necessary handler. You pass in
@@ -85,9 +89,7 @@ class Subcommands:
 
         # Parse the sub-command options
         args = docopt(
-            handler.__doc__.format(
-                program=self.program,
-                command=command),
+            self._format(handler.__doc__, command=command),
             argv,
             version=self.version)
 
@@ -105,8 +107,8 @@ class Subcommands:
         elif command not in self.commands:
             options = self.top_level_doc
         else:
-            options = self.commands[command].__doc__.format(
-                program=self.program,
+            options = self._format(
+                self.commands[command].__doc__,
                 command=command)
 
         return docopt(
@@ -120,6 +122,36 @@ def main(commands,
          version,
          argv=None,
          top_level_doc=None):
+    """Top-level driver for creating subcommand-based programs.
+
+    When docstrings are displayed, the following values are interpolated into
+    them:
+
+      {program}: The name of the program
+      {version}: The program's version string
+      {available_commands}: A comma-separated list of the available command names
+      {command}: The current command (if applicable)
+
+    When `top_level_doc` is displayed, the following values are interpolated
+    into it:
+
+      {program}: the name of the program
+      {available_commands}: A comma-separated list of available command names.
+
+    When subcommand docstrings are displayed, the following values are
+    interpolated into them:
+
+    Args:
+      commands: A dict-like mapping from command names to subcommand handlers.
+      program: The top-level name of your program.
+      version: The version string for your program.
+      argv: The command-line arguments to parse. If `None`, this defaults to
+        `sys.argv[1:]`
+
+      top_level_doc: The top-level docstring for your program. If `None`, a
+        standard default version is applied.
+
+    """
     subc = Subcommands(
         commands,
         program,
