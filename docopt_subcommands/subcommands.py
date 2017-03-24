@@ -56,6 +56,12 @@ class Subcommands:
             available_commands='\n  '.join(sorted(self._commands)),
             program=self.program)
 
+    def command(self, name):
+        def decorator(f):
+            self.add_command(name, f)
+            return f
+        return decorator
+
     def add_command(self, name, handler):
         # TODO: Prevent overwriting 'help'?
         self._commands[name] = handler
