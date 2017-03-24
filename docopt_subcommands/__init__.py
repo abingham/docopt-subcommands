@@ -12,10 +12,10 @@ def command(name):
     return decorator
 
 
-def main(subc=None,
-         argv=None,
-         top_level_doc=None,
+def main(top_level_doc=None,
          program=None,
+         commands=None,
+         argv=None,
          version=None):
     """Top-level driver for creating subcommand-based programs.
 
@@ -47,18 +47,18 @@ def main(subc=None,
         standard default version is applied.
 
     """
-    if subc is None:
+    if commands is None:
         if program is None:
             raise ValueError(
                 '`program` required if subcommand object not provided')
         if version is None:
             raise ValueError(
                 '`version` required if subcommand object not provided')
-        subc = Subcommands(program, version)
+        commands = Subcommands(program, version)
         for k, v in _commands.items():
-            subc.add_command(k, v)
+            commands.add_command(k, v)
 
     if argv is None:
         argv = sys.argv[1:]
 
-    sys.exit(subc(argv))
+    sys.exit(commands(argv))

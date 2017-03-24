@@ -24,4 +24,4 @@ def bar_handler(args):
 sc.add_command('foo', foo_handler)
 sc.add_command('bar', bar_handler)
 
-docopt_subcommands.main(sc)
+docopt_subcommands.main(commands=sc)

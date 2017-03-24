@@ -23,4 +23,4 @@ def bar_handler(args):
     print("Bar, {}".format(args['<name>']))
 
 
-docopt_subcommands.main(sc)
+docopt_subcommands.main(commands=sc)
