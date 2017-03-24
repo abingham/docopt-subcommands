@@ -13,7 +13,7 @@ def foo_handler(args):
     print("Foo, {}".format(args['<name>']))
 
 
-@dsc.command('foo')
+@dsc.command('bar')
 def bar_handler(args):
     """usage: {program} {command} <name>
 

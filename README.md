@@ -33,16 +33,22 @@ The basic idea behind `docopt-subcommands` is simple:
  1. You provide a separate *handler function* for each subcommand.
  2. The docstring for each handler function defines the docopt definition for
     that subcommand.
- 3. You provide a dict-like mapping from subcommand names to handler functions.
+ 3. You register your handler functions with the names of the subcommands which
+    will invoke them.
  4. You provide a program name, version string, and (optionally) a top-level
     documentation string.
 
 Then `docopt-subcommands` does the work of stitching everything together into a
-subcommand-driven program. Here's how it looks (from the included `example.py`):
+subcommand-driven program. Here's how it looks (from the included `basic_example.py`):
 
 ```python
-import docopt_subcommands
+# Basic, most common usage of docopt_subcommands
 
+import docopt_subcommands as dsc
+
+
+# 1. Use the `command` decorator to add subcommands functions.
+@dsc.command('foo')
 def foo_handler(args):
     """usage: {program} {command} <name>
 
@@ -50,6 +56,8 @@ def foo_handler(args):
     """
     print("Foo, {}".format(args['<name>']))
 
+
+@dsc.command('bar')
 def bar_handler(args):
     """usage: {program} {command} <name>
 
@@ -57,25 +65,21 @@ def bar_handler(args):
     """
     print("Bar, {}".format(args['<name>']))
 
-COMMAND_MAP = {
-    'foo': foo_handler,
-    'bar': bar_handler
-}
 
-docopt_subcommands.main(
-    COMMAND_MAP,
-    'docopt-subcommand-example',
-    'docopt-subcommand-example v42')
+# 2. Pass a program name and version string to `main` to run a program with the
+# subcommands you defined with the decorators above.
+dsc.main(
+    program='docopt-subcommand-example',
+    version='docopt-subcommand-example v42')
 ```
 
 If you run this program at the commands line you'll see that you have a nice,
 subcommand-based CLI program:
 
 ```shell
-$ python example.py
+$ python basic_example.py
 Usage: docopt-subcommand-example [options] <command> [<args> ...]
-
-$ python example.py -h
+$ python basic_example.py -h
 docopt-subcommand-example
 
 Usage: docopt-subcommand-example [options] <command> [<args> ...]
@@ -90,14 +94,14 @@ Available commands:
 
 See 'docopt-subcommand-example help <command>' for help on specific commands.
 
-$ python example.py foo
+$ python basic_example.py foo
 usage: docopt-subcommand-example foo <name>
 
-$ python example.py foo -h
+$ python basic_example.py foo -h
 usage: docopt-subcommand-example foo <name>
 
     Apply foo to a name.
 
-$ python example.py foo Bubba
+$ python basic_example.py foo Bubba
 Foo, Bubba
 ```
