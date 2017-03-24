@@ -25,5 +25,5 @@ def bar_handler(args):
 # 2. Pass a program name and version string to `main` to run a program with the
 # subcommands you defined with the decorators above.
 dsc.main(
-    program='docopt-subcommand-example',
-    version='docopt-subcommand-example v42')
+    'docopt-subcommand-example',
+    'docopt-subcommand-example v42')

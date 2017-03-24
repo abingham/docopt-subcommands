@@ -12,14 +12,27 @@ def command(name):
     return decorator
 
 
-def main(top_level_doc=None,
-         program=None,
+def main(program=None,
+         version=None,
+         top_level_doc=None,
          commands=None,
-         argv=None,
-         version=None):
+         argv=None):
     """Top-level driver for creating subcommand-based programs.
 
-    When docstrings are displayed, the following values are interpolated into
+    Args:
+        top_level_doc: The top-level docstring template for your program. If
+            `None`, a standard default version is applied.
+        commands: A `Subcommands` instance.
+        program: The name of your program.
+        version: The version string for your program.
+        argv: The command-line arguments to parse. If `None`, this defaults to
+            `sys.argv[1:]`
+
+    If `commands` is provided, then `program` and `version` are ignored (they should be set on the Subcommands).
+
+    TODO: Finish this!!!
+
+       When docstrings are displayed, the following values are interpolated into
     them:
 
       {program}: The name of the program
@@ -35,16 +48,6 @@ def main(top_level_doc=None,
 
     When subcommand docstrings are displayed, the following values are
     interpolated into them:
-
-    Args:
-      commands: A dict-like mapping from command names to subcommand handlers.
-      program: The top-level name of your program.
-      version: The version string for your program.
-      argv: The command-line arguments to parse. If `None`, this defaults to
-        `sys.argv[1:]`
-
-      top_level_doc: The top-level docstring for your program. If `None`, a
-        standard default version is applied.
 
     """
     if commands is None:
