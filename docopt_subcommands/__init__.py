@@ -2,9 +2,7 @@ from .subcommands import Subcommands
 import sys
 
 
-def main(commands,
-         program,
-         version,
+def main(subc,
          argv=None,
          top_level_doc=None):
     """Top-level driver for creating subcommand-based programs.
@@ -37,12 +35,6 @@ def main(commands,
         standard default version is applied.
 
     """
-    subc = Subcommands(
-        commands,
-        program,
-        version,
-        top_level_doc)
-
     if argv is None:
         argv = sys.argv[1:]
 

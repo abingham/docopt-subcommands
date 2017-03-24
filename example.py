@@ -1,5 +1,9 @@
 import docopt_subcommands
 
+sc = docopt_subcommands.Subcommands(
+    'docopt-subcommand-example',
+    'docopt-subcommand-example v42')
+
 
 def foo_handler(args):
     """usage: {program} {command} <name>
@@ -16,12 +20,8 @@ def bar_handler(args):
     """
     print("Bar, {}".format(args['<name>']))
 
-COMMAND_MAP = {
-    'foo': foo_handler,
-    'bar': bar_handler
-}
 
-docopt_subcommands.main(
-    COMMAND_MAP,
-    'docopt-subcommand-example',
-    'docopt-subcommand-example v42')
+sc.add_command('foo', foo_handler)
+sc.add_command('bar', bar_handler)
+
+docopt_subcommands.main(sc)
