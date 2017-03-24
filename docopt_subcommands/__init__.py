@@ -2,9 +2,21 @@ from .subcommands import Subcommands
 import sys
 
 
-def main(subc,
+_commands = {}
+
+
+def command(name):
+    def decorator(f):
+        _commands[name] = f
+        return f
+    return decorator
+
+
+def main(subc=None,
          argv=None,
-         top_level_doc=None):
+         top_level_doc=None,
+         program=None,
+         version=None):
     """Top-level driver for creating subcommand-based programs.
 
     When docstrings are displayed, the following values are interpolated into
@@ -35,6 +47,17 @@ def main(subc,
         standard default version is applied.
 
     """
+    if subc is None:
+        if program is None:
+            raise ValueError(
+                '`program` required if subcommand object not provided')
+        if version is None:
+            raise ValueError(
+                '`version` required if subcommand object not provided')
+        subc = Subcommands(program, version)
+        for k, v in _commands.items():
+            subc.add_command(k, v)
+
     if argv is None:
         argv = sys.argv[1:]
 
