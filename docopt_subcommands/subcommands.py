@@ -112,6 +112,7 @@ class Subcommands:
 
     def _handle_help(self, config):
         """usage: {program} {command} [<command>]
+
         Get the top-level help, or help for <command> if specified.
         """
         command = config['<command>']
