@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sixty-north/cosmic-ray.png?branch=master)](https://travis-ci.org/sixty-north/cosmic-ray)
+[![Build Status](https://travis-ci.org/abingham/docopt_subcommands.png?branch=master)](https://travis-ci.org/abingham/docopt_subcommands)
 
 # docopt-subcommands
 
