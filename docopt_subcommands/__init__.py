@@ -18,7 +18,8 @@ def main(program=None,
          version=None,
          doc_template=None,
          commands=None,
-         argv=None):
+         argv=None,
+         exit_at_end=True):
     """Top-level driver for creating subcommand-based programs.
 
     Args:
@@ -29,6 +30,7 @@ def main(program=None,
         version: The version string for your program.
         argv: The command-line arguments to parse. If `None`, this defaults to
             `sys.argv[1:]`
+        exit_at_end: Whether to call `sys.exit()` at the end of the function.
 
     There are two ways to use this function. First, you can pass `program`,
     `version`, and `doc_template`, in which case `docopt_subcommands` will use
@@ -57,4 +59,8 @@ def main(program=None,
     if argv is None:
         argv = sys.argv[1:]
 
-    sys.exit(commands(argv))
+    result = commands(argv)
+    if exit_at_end:
+        sys.exit(result)
+    else:
+        return result
