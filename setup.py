@@ -13,7 +13,7 @@ requires = [
     ]
 
 setup(name='docopt_subcommands',
-      version='1.0',
+      version='2.0',
       description='create subcommand-based CLI programs with docopt',
       long_description=README,
       license='MIT License',
