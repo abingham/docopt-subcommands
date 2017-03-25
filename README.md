@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sixty-north/cosmic-ray.png?branch=master)](https://travis-ci.org/sixty-north/cosmic-ray)
+
 # docopt-subcommands
 
 A simple implementation of subcommands for docopt.
