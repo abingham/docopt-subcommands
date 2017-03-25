@@ -6,6 +6,8 @@ _commands = {}
 
 
 def command(name):
+    """A decorator to register a subcommand with the global `Subcommands` instance.
+    """
     def decorator(f):
         _commands[name] = f
         return f
@@ -14,13 +16,13 @@ def command(name):
 
 def main(program=None,
          version=None,
-         top_level_doc=None,
+         doc_template=None,
          commands=None,
          argv=None):
     """Top-level driver for creating subcommand-based programs.
 
     Args:
-        top_level_doc: The top-level docstring template for your program. If
+        doc_template: The top-level docstring template for your program. If
             `None`, a standard default version is applied.
         commands: A `Subcommands` instance.
         program: The name of your program.
@@ -28,27 +30,18 @@ def main(program=None,
         argv: The command-line arguments to parse. If `None`, this defaults to
             `sys.argv[1:]`
 
-    If `commands` is provided, then `program` and `version` are ignored (they should be set on the Subcommands).
+    There are two ways to use this function. First, you can pass `program`,
+    `version`, and `doc_template`, in which case `docopt_subcommands` will use
+    these arguments along with the subcommands registered with `command()` to
+    define you program.
 
-    TODO: Finish this!!!
+    The second way to use this function is to pass in a `Subcommands` objects
+    via the `commands` argument. In this case the `program`, `version`, and
+    `doc_template` arguments are ignored, and the `Subcommands` instance takes
+    precedence.
 
-       When docstrings are displayed, the following values are interpolated into
-    them:
-
-      {program}: The name of the program
-      {version}: The program's version string
-      {available_commands}: A comma-separated list of the available command names
-      {command}: The current command (if applicable)
-
-    When `top_level_doc` is displayed, the following values are interpolated
-    into it:
-
-      {program}: the name of the program
-      {available_commands}: A comma-separated list of available command names.
-
-    When subcommand docstrings are displayed, the following values are
-    interpolated into them:
-
+    In both cases the `argv` argument can be used to specify the arguments to
+    be parsed.
     """
     if commands is None:
         if program is None:
@@ -57,7 +50,7 @@ def main(program=None,
         if version is None:
             raise ValueError(
                 '`version` required if subcommand object not provided')
-        commands = Subcommands(program, version)
+        commands = Subcommands(program, version, doc_template)
         for k, v in _commands.items():
             commands.add_command(k, v)
 

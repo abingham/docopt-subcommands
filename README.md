@@ -105,3 +105,5 @@ usage: docopt-subcommand-example foo <name>
 $ python basic_example.py foo Bubba
 Foo, Bubba
 ```
+
+For more examples, see the `examples` directory.
