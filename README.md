@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/abingham/docopt_subcommands.png?branch=master)](https://travis-ci.org/abingham/docopt_subcommands)
+[![Build Status](https://travis-ci.org/abingham/docopt-subcommands.png?branch=master)](https://travis-ci.org/abingham/docopt-subcommands)
 
 # docopt-subcommands
 
