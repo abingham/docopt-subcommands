@@ -32,4 +32,12 @@ setup(name='docopt_subcommands',
       zip_safe=False,
       install_requires=requires,
       # tests_require=tests_require,
+      # List additional groups of dependencies here (e.g. development dependencies).
+      # You can install these using the following syntax, for example:
+      # $ pip install -e .[dev,test]
+      extras_require={
+          # 'dev': ['check-manifest', 'wheel'],
+          # 'doc': ['sphinx', 'cartouche'],
+          'test': ['pytest'],
+      },
       )
