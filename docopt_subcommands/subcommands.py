@@ -25,29 +25,33 @@ class Subcommands:
     command-line parse for the subcommand, its help message, etc.
 
     Args:
+        program: The name of the program.
+        version: The version of the program.
         doc_template: The top-level documentation string for your program.
             This is passed to docopt for generating the top-level command line
             parser. It *must* contain a "<command>" entry in the command line
             where the subcommand is specified. Optionally it can contain an
             "{available_commands}" string interpolation placeholder where
             available commands will be displayed in help output.
+        common_option_handler: A callable to handle any options which apply to
+            the top-level command.
         commands: A dict mapping commands names to handler function. A handler
             will be invoked when its corresponding command name is requested by
             the user. It will be invoked with the configuration parsed by
             docopt for handler's docstring.
-        program: The name of the program.
-        version: The version of the program.
     """
 
     def __init__(self,
                  program,
                  version,
-                 doc_template=None):
+                 doc_template=None,
+                 common_option_handler=None):
         if doc_template is None:
             doc_template = DEFAULT_DOC_TEMPLATE
 
         self._doc_template = doc_template
         self._commands = {'help': self._handle_help}
+        self._common_option_handler = common_option_handler or (lambda c: None)
         self.program = program
 
         self.version = version
@@ -83,24 +87,27 @@ class Subcommands:
 
         """
         # Parse top-level options, primarily looking for the sub-command to run.
-        args = docopt(self.top_level_doc,
-                      argv=argv,
-                      options_first=True,
-                      version=self.version)
+        config = docopt(self.top_level_doc,
+                        argv=argv,
+                        options_first=True,
+                        version=self.version)
 
-        command = args['<command>']
+        self._common_option_handler(config)
+
+        command = config['<command>']
         if command is None:
             command = 'help'
 
         # Try to find a command handler, defaulting to 'help' if no match it found.
         try:
             handler = self._commands[command]
+            argv = [command] + config['<args>']
         except KeyError:
             handler = self._handle_help
             argv = ['help']
 
         # Parse the sub-command options
-        args = docopt(
+        config = docopt(
             handler.__doc__.format(
                 program=self.program,
                 command=command),
@@ -108,7 +115,7 @@ class Subcommands:
             version=self.version)
 
         # run the command
-        return handler(args)
+        return handler(config)
 
     def _handle_help(self, config):
         """usage: {program} {command} [<command>]

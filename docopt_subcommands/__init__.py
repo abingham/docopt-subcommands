@@ -17,17 +17,20 @@ def command(name):
 def main(program=None,
          version=None,
          doc_template=None,
+         common_option_handler=None,
          commands=None,
          argv=None,
          exit_at_end=True):
     """Top-level driver for creating subcommand-based programs.
 
     Args:
-        doc_template: The top-level docstring template for your program. If
-            `None`, a standard default version is applied.
-        commands: A `Subcommands` instance.
         program: The name of your program.
         version: The version string for your program.
+        doc_template: The top-level docstring template for your program. If
+            `None`, a standard default version is applied.
+        common_option_handler: A callable to handle any options which apply to
+            the top-level command.
+        commands: A `Subcommands` instance.
         argv: The command-line arguments to parse. If `None`, this defaults to
             `sys.argv[1:]`
         exit_at_end: Whether to call `sys.exit()` at the end of the function.
@@ -44,6 +47,7 @@ def main(program=None,
 
     In both cases the `argv` argument can be used to specify the arguments to
     be parsed.
+
     """
     if commands is None:
         if program is None:
@@ -52,7 +56,10 @@ def main(program=None,
         if version is None:
             raise ValueError(
                 '`version` required if subcommand object not provided')
-        commands = Subcommands(program, version, doc_template)
+        commands = Subcommands(program,
+                               version,
+                               doc_template=doc_template,
+                               common_option_handler=common_option_handler)
         for k, v in _commands.items():
             commands.add_command(k, v)
 
