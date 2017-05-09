@@ -137,3 +137,16 @@ class Subcommands:
                 command=command),
             ['--help'],
             version=self.version)
+
+    def register(self, name):
+        """A decorator which can be used to register a function as a command.
+
+        Args:
+            name: The name of the command corresponding to the function.
+        """
+
+        def decorator(f):
+            self.add_command(name, f)
+            return f
+
+        return decorator
