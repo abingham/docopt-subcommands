@@ -1,4 +1,4 @@
-# Example of using Subcommands with decorators (i.e. Subcommands for crazy
+# Example of using Subcommands without decorators (i.e. Subcommands for crazy
 # people).
 
 import docopt_subcommands
