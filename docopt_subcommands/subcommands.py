@@ -92,7 +92,9 @@ class Subcommands:
                         options_first=True,
                         version=self.version)
 
-        self._common_option_handler(config)
+        common_option_code = self._common_option_handler(config)
+        if common_option_code:
+            return common_option_code
 
         command = config['<command>']
         if command is None:
