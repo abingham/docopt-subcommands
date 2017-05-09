@@ -6,10 +6,11 @@ A simple implementation of subcommands for docopt.
 
 `docopt-subcommands` allows you to create subcommand-based programs
 using [docopt](https://github.com/docopt/docopt). A subcommand-based program is
-one in which the main program a "subcommand" argument to tell it what to do.
+one in which the main program uses a "subcommand" argument to tell it what to
+do.
 
 The classic example of such a program is [git](https://git-scm.com/). The `git`
-command with not arguments doesn't do much of anything. Instead, its the first
+command with no arguments doesn't do much of anything. Instead, it's the first
 argument to `git` - the *subcommand* - that tells it what to actually do. For
 example:
 
@@ -26,7 +27,7 @@ git rebase
 is the subcommand for rebasing.
 
 `docopt-subcommands` is here to help you create similar kinds of command-line
-tools.
+tools with `docopt`'.
 
 ## Quickstart
 
@@ -75,7 +76,7 @@ dsc.main(
     version='docopt-subcommand-example v42')
 ```
 
-If you run this program at the commands line you'll see that you have a nice,
+If you run this program at the command line you'll see that you have a nice,
 subcommand-based CLI program:
 
 ```shell
