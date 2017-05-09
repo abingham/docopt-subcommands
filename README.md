@@ -42,7 +42,8 @@ The basic idea behind `docopt-subcommands` is simple:
     documentation string.
 
 Then `docopt-subcommands` does the work of stitching everything together into a
-subcommand-driven program. Here's how it looks (from the included `basic_example.py`):
+subcommand-driven program. Here's how it looks (from the included
+`exampels/basic_example.py`):
 
 ```python
 # Basic, most common usage of docopt_subcommands
@@ -110,3 +111,53 @@ Foo, Bubba
 ```
 
 For more examples, see the `examples` directory.
+
+## Advanced usage
+
+For most users the basic usage described in "Quickstart" should be all you need,
+but some users will need more control of `docopt_subcommands`. The
+`docopt_subcommands.main()` that we used earlier is really just a convenience
+layer on top of the real workhorse, `docopt_subcommands.Subcommands`. You can
+instantiate this class directly, bypassing `main()`, and interact with it as you
+need before actually invoke command-line processing.
+
+For the most part, the arguments to the `Subcommands` initializer are very
+similar to those to `main()`. This reflects the fact that `main()` really just
+instantiates a `Subcommands` instance (if you don't provide one), populates it
+with commands, and calls it with the command line arguments. You can do all of
+these steps yourself if you need to.
+
+As an example, here's what the basic example above looks like if you construct a
+`Subcommands` instance directly.:
+
+```python
+import docopt_subcommands as dsc
+import sys
+
+sc = dsc.Subcommands(
+    program='docopt-subcommand-example',
+    version='docopt-subcommand-example v42')
+
+@sc.command('foo')
+def foo_handler(args):
+    """usage: {program} {command} <name>
+
+    Apply foo to a name.
+    """
+    print("Foo, {}".format(args['<name>']))
+
+
+@sc.command('bar')
+def bar_handler(args):
+    """usage: {program} {command} <name>
+
+    Apply bar to a name.
+    """
+    print("Bar, {}".format(args['<name>']))
+
+sc(sys.argv[1:])
+```
+
+As you can see, it's not substantially different from the basic example.
+`main()` primarily just adds a layer of convenience - mostly by choosing
+reasonable default values for some things - that you lose with this approach.
