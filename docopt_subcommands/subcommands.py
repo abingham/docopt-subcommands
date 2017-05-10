@@ -14,6 +14,17 @@ See '{program} help <command>' for help on specific commands.
 """
 
 
+def docstring_to_subcommand(docstring):
+    usage = [l for l in docstring.split() if l]
+    if len(usage) < 3:
+        raise ValueError(
+            "Subcommand docstring must start with 'usage: {program} <subcommand>'")
+    if usage[0] != 'usage:':
+        raise ValueError(
+            "Subcommand docstring must start with 'usage: {program} <subcommand>'")
+    return usage[2]
+
+
 class Subcommands:
     """A simple form of sub-command support for docopt.
 
@@ -64,17 +75,20 @@ class Subcommands:
             available_commands='\n  '.join(sorted(self._commands)),
             program=self.program)
 
-    def command(self, name):
+    def command(self, name=None):
         """A decorator to add subcommands.
         """
         def decorator(f):
-            self.add_command(name, f)
+            self.add_command(f, name)
             return f
         return decorator
 
-    def add_command(self, name, handler):
+    def add_command(self, handler, name=None):
         """Add a subcommand `name` which invokes `handler`.
         """
+        if name is None:
+            name = docstring_to_subcommand(handler.__doc__)
+
         # TODO: Prevent overwriting 'help'?
         self._commands[name] = handler
 
