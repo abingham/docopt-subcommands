@@ -1,21 +1,22 @@
-# Basic, most common usage of docopt_subcommands
+# Just like basic_example.py except we pass the subcommand names to the
+# `command` decorator rather than embed them in the docstring.
 
 import docopt_subcommands as dsc
 
 
 # 1. Use the `command` decorator to add subcommands functions.
-@dsc.command()
+@dsc.command('foo')
 def foo_handler(args):
-    """usage: {program} foo <name>
+    """usage: {program} {command} <name>
 
     Apply foo to a name.
     """
     print("Foo, {}".format(args['<name>']))
 
 
-@dsc.command()
+@dsc.command('bar')
 def bar_handler(args):
-    """usage: {program} bar <name>
+    """usage: {program} {command} <name>
 
     Apply bar to a name.
     """
