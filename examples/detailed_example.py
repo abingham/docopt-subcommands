@@ -28,8 +28,8 @@ def bar_handler(args):
 
 # 3. Register your handlers and associated command names with
 # `Subcommands.add_command()`.
-sc.add_command('foo', foo_handler)
-sc.add_command('bar', bar_handler)
+sc.add_command(foo_handler, 'foo')
+sc.add_command(bar_handler, 'bar')
 
 # 4. Pass the Subcommands object to `main` via the `commands` keyword argument
 # to run a program with the subcommands you defined with `add_command()`.

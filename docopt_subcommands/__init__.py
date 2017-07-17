@@ -2,14 +2,14 @@ from .subcommands import Subcommands
 import sys
 
 
-_commands = {}
+_commands = []
 
 
-def command(name):
+def command(name=None):
     """A decorator to register a subcommand with the global `Subcommands` instance.
     """
     def decorator(f):
-        _commands[name] = f
+        _commands.append((name, f))
         return f
     return decorator
 
@@ -60,8 +60,8 @@ def main(program=None,
                                version,
                                doc_template=doc_template,
                                common_option_handler=common_option_handler)
-        for k, v in _commands.items():
-            commands.add_command(k, v)
+        for name, handler in _commands:
+            commands.add_command(handler, name)
 
     if argv is None:
         argv = sys.argv[1:]

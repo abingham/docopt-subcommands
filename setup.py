@@ -38,6 +38,6 @@ setup(name='docopt_subcommands',
       extras_require={
           # 'dev': ['check-manifest', 'wheel'],
           # 'doc': ['sphinx', 'cartouche'],
-          'test': ['pytest'],
+          'test': ['hypothesis>=1.11', 'pytest>=3.0.7'],
       },
-      )
+)
