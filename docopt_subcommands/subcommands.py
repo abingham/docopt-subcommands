@@ -1,3 +1,5 @@
+import textwrap
+
 from docopt import docopt
 
 DEFAULT_DOC_TEMPLATE = """{program}
@@ -12,6 +14,16 @@ Available commands:
 
 See '{program} help <command>' for help on specific commands.
 """
+
+
+def dedent(s):
+    """Removes the hanging dedent from all the first line of a string."""
+    head, _, tail = s.partition('\n')
+    dedented_tail = textwrap.dedent(tail)
+    result = "{head}\n{tail}".format(
+        head=head,
+        tail=dedented_tail)
+    return result
 
 
 def docstring_to_subcommand(docstring):
@@ -124,9 +136,10 @@ class Subcommands:
 
         # Parse the sub-command options
         config = docopt(
-            handler.__doc__.format(
-                program=self.program,
-                command=command),
+            dedent(
+                handler.__doc__.format(
+                    program=self.program,
+                    command=command)),
             argv,
             version=self.version)
 
@@ -148,8 +161,9 @@ class Subcommands:
             options = self._commands[command].__doc__
 
         return docopt(
-            options.format(
-                program=self.program,
-                command=command),
+            dedent(
+                options.format(
+                    program=self.program,
+                    command=command)),
             ['--help'],
             version=self.version)
