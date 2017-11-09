@@ -1,6 +1,6 @@
 language: python
+# Technically we work on 3.3 as well, but hypothesis doesn't...
 python:
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
