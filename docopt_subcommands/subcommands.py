@@ -155,7 +155,7 @@ class Subcommands:
         if not command:
             options = self.top_level_doc
         elif command not in self._commands:
-            print('"{}}" is not a valid command', command)
+            print('"{}" is not a valid command'.format(command))
             options = self.top_level_doc
         else:
             options = self._commands[command].__doc__
