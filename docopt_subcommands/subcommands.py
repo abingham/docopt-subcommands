@@ -105,12 +105,12 @@ class Subcommands:
         self._commands[name] = handler
 
     def __call__(self, argv):
-        """Run the subcommand processor and invoke the necessary handler. You pass in
-        some command line arguments. This then determines the correct handler
-        and executes it. If no matching handler can be found, then a help
-        message is shown. Also, command-specific help messages can be
-        displayed.
+        """Run the subcommand processor and invoke the necessary handler.
 
+        You pass in some command line arguments. This then determines the
+        correct handler and executes it. If no matching handler can be found,
+        then a help message is shown. Also, command-specific help messages can
+        be displayed.
         """
         # Parse top-level options, primarily looking for the sub-command to run.
         config = docopt(self.top_level_doc,
@@ -131,8 +131,7 @@ class Subcommands:
             handler = self._commands[command]
             argv = [command] + config['<args>']
         except KeyError:
-            handler = self._handle_help
-            argv = ['help']
+            return self(['help', command])
 
         # Parse the sub-command options
         config = docopt(
@@ -155,7 +154,7 @@ class Subcommands:
         if not command:
             options = self.top_level_doc
         elif command not in self._commands:
-            print('"{}" is not a valid command'.format(command))
+            print('"{}" is not a valid command.\n'.format(command))
             options = self.top_level_doc
         else:
             options = self._commands[command].__doc__

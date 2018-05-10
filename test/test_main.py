@@ -3,11 +3,6 @@ import docopt_subcommands as dsc
 import pytest
 
 
-@pytest.fixture()
-def reset_commands():
-    dsc._commands = []
-
-
 @pytest.mark.usefixtures("reset_commands")
 class TestMain:
     def test_default_top_level_help(self):
