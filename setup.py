@@ -41,7 +41,7 @@ setup(name='docopt_subcommands',
       # You can install these using the following syntax, for example:
       # $ pip install -e .[dev,test]
       extras_require={
-          # 'dev': ['check-manifest', 'wheel'],
+          'dev': ['twine', 'wheel'],
           # 'doc': ['sphinx', 'cartouche'],
           'test': ['hypothesis>=1.11', 'pytest>=3.0.7'],
       },
