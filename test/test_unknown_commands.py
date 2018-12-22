@@ -9,12 +9,12 @@ Usage: prog [options] <command> [<args> ...]
 
 Options:
   -h --help     Show this screen.
+  -v --version  Show the program version.
 
 Available commands:
   foo
-  help
 
-See 'prog help <command>' for help on specific commands.
+See 'prog <command> -h' for help on specific commands.
 '''
 
 
@@ -57,7 +57,7 @@ class TestUnknownCommands:
         try:
             dsc.main(program='prog',
                      version='prog-1',
-                     argv=['help', 'llamas'],
+                     argv=['llamas'],
                      exit_at_end=False)
         except SystemExit:
             pass

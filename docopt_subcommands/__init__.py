@@ -17,7 +17,6 @@ def command(name=None):
 def main(program=None,
          version=None,
          doc_template=None,
-         common_option_handler=None,
          commands=None,
          argv=None,
          exit_at_end=True):
@@ -28,8 +27,6 @@ def main(program=None,
         version: The version string for your program.
         doc_template: The top-level docstring template for your program. If
             `None`, a standard default version is applied.
-        common_option_handler: A callable to handle any options which apply to
-            the top-level command.
         commands: A `Subcommands` instance.
         argv: The command-line arguments to parse. If `None`, this defaults to
             `sys.argv[1:]`
@@ -58,8 +55,7 @@ def main(program=None,
                 '`version` required if subcommand object not provided')
         commands = Subcommands(program,
                                version,
-                               doc_template=doc_template,
-                               common_option_handler=common_option_handler)
+                               doc_template=doc_template)
         for name, handler in _commands:
             commands.add_command(handler, name)
 

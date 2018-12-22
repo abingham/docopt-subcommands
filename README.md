@@ -94,7 +94,6 @@ Options:
 Available commands:
   bar
   foo
-  help
 
 See 'docopt-subcommand-example help <command>' for help on specific commands.
 

@@ -19,7 +19,7 @@ def foo_handler(args):
     print("Foo, {}".format(args['<name>']))
 
 
-@sc.command('foo')
+@sc.command('bar')
 def bar_handler(args):
     """usage: {program} {command} <name>
 
