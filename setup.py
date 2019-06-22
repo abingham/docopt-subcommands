@@ -8,12 +8,8 @@ with open(os.path.join(here, 'README.md')) as f:
 # with open(os.path.join(here, 'CHANGES.txt')) as f:
 #    CHANGES = f.read()
 
-requires = [
-    'docopt',
-    ]
-
 setup(name='docopt_subcommands',
-      version='3.0.0',
+      version='4.0.0',
       description='create subcommand-based CLI programs with docopt',
       long_description=README,
       license='MIT License',
@@ -26,6 +22,8 @@ setup(name='docopt_subcommands',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
           'License :: OSI Approved :: MIT License',
       ],
       author='Austin Bingham',
@@ -35,7 +33,7 @@ setup(name='docopt_subcommands',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      install_requires=requires,
+      install_requires=['docopt'],
       # tests_require=tests_require,
       # List additional groups of dependencies here (e.g. development dependencies).
       # You can install these using the following syntax, for example:

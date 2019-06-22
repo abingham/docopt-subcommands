@@ -6,11 +6,11 @@ import docopt_subcommands
 # 1. Create a Subcommands object with a program name and version string.
 sc = docopt_subcommands.Subcommands(
     'docopt-subcommand-example',
-    'docopt-subcommand-example v42')
+)
 
 
 # 2. Define your handlers without registering them yet.
-def foo_handler(args):
+def foo_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply foo to a name.
@@ -18,7 +18,7 @@ def foo_handler(args):
     print("Foo, {}".format(args['<name>']))
 
 
-def bar_handler(args):
+def bar_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply bar to a name.

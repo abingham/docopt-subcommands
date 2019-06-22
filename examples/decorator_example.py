@@ -6,12 +6,12 @@ import docopt_subcommands
 # 1. Create a Subcommands object with a program name and version string.
 sc = docopt_subcommands.Subcommands(
     'docopt-subcommand-example',
-    'docopt-subcommand-example v42')
+    )
 
 
 # 2. Use the Subcommand's `command` decorator to add subcommands.
 @sc.command('foo')
-def foo_handler(args):
+def foo_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply foo to a name.
@@ -20,7 +20,7 @@ def foo_handler(args):
 
 
 @sc.command('bar')
-def bar_handler(args):
+def bar_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply bar to a name.

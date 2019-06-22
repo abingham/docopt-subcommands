@@ -8,7 +8,6 @@ class TestMain:
     def test_default_top_level_help(self):
         try:
             dsc.main(program='prog',
-                     version='prog-1',
                      argv=[],
                      exit_at_end=False)
         except docopt.DocoptExit as e:
@@ -22,7 +21,6 @@ class TestMain:
 
         try:
             dsc.main(program='prog',
-                     version='prog-1',
                      argv=['foo', '-h'],
                      exit_at_end=False)
         except SystemExit:
@@ -39,7 +37,6 @@ class TestMain:
 
         try:
             dsc.main(program='prog',
-                     version='prog-1',
                      argv=['foo', '-h'],
                      exit_at_end=False)
         except SystemExit:

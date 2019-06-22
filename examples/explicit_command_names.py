@@ -6,7 +6,7 @@ import docopt_subcommands as dsc
 
 # 1. Use the `command` decorator to add subcommands functions.
 @dsc.command('foo')
-def foo_handler(args):
+def foo_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply foo to a name.
@@ -15,7 +15,7 @@ def foo_handler(args):
 
 
 @dsc.command('bar')
-def bar_handler(args):
+def bar_handler(_, args):
     """usage: {program} {command} <name>
 
     Apply bar to a name.
@@ -27,4 +27,4 @@ def bar_handler(args):
 # subcommands you defined with the decorators above.
 dsc.main(
     'docopt-subcommand-example',
-    'docopt-subcommand-example v42')
+)

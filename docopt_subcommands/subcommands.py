@@ -8,7 +8,6 @@ Usage: {program} [options] <command> [<args> ...]
 
 Options:
   -h --help     Show this screen.
-  -v --version  Show the program version.
 
 Available commands:
   {available_commands}
@@ -51,8 +50,6 @@ class Subcommands:
     Args:
         program: The name of the program.
 
-        version: The version of the program.
-
         doc_template: The top-level documentation string for your program.
             This is passed to docopt for generating the top-level command line
             parser. It *must* contain a "<command>" entry in the command line
@@ -68,7 +65,6 @@ class Subcommands:
 
     def __init__(self,
                  program,
-                 version,
                  doc_template=None):
         if doc_template is None:
             doc_template = DEFAULT_DOC_TEMPLATE
@@ -76,8 +72,6 @@ class Subcommands:
         self._doc_template = doc_template
         self._commands = {}
         self.program = program
-
-        self.version = version
 
     @property
     def top_level_doc(self):
@@ -104,24 +98,6 @@ class Subcommands:
         # TODO: Prevent overwriting 'help'?
         self._commands[name] = handler
 
-    def _precommand_option_handler(self, config):
-        """Handle options that come before the command.
-
-        This should look at options that come before the command and handle
-        them. If the handling results in the end of the program, this should
-        return non-`None`.
-
-        Subclasses can override this to change pre-command option handling.
-
-        Args:
-            config: The initial docopt-processed config.
-
-        Return: `None` if the program should continue, otherwise a return code.
-        """
-        if config['--version']:
-            print(self.version)
-            return 0
-
     def __call__(self, argv):
         """Run the subcommand processor and invoke the necessary handler.
 
@@ -131,35 +107,29 @@ class Subcommands:
         be displayed.
         """
         # Parse top-level options, primarily looking for the sub-command to run.
-        config = docopt(self.top_level_doc,
-                        argv=argv,
-                        options_first=True,
-                        version=self.version)
+        common_config = docopt(self.top_level_doc,
+                               argv=argv,
+                               options_first=True)
 
-        common_option_code = self._precommand_option_handler(config)
-        if common_option_code:
-            return common_option_code
-
-        command = config['<command>']
+        command = common_config['<command>']
         if command is None:
             command = 'help'
 
         # Try to find a command handler, defaulting to 'help' if no match it found.
         try:
             handler = self._commands[command]
-            argv = [command] + config['<args>']
+            argv = [command] + common_config['<args>']
         except KeyError:
             print('"{}" is not a valid command.\n'.format(command))
             return self(['-h'])
 
         # Parse the sub-command options
-        config = docopt(
+        command_config = docopt(
             dedent(
                 handler.__doc__.format(
                     program=self.program,
                     command=command)),
-            argv,
-            version=self.version)
+            argv)
 
         # run the command
-        return handler(config)
+        return handler(common_config, command_config)
