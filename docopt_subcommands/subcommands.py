@@ -71,6 +71,7 @@ class Subcommands:
 
         self._doc_template = doc_template
         self._commands = {}
+        self._non_command_handler = lambda _: 0
         self.program = program
 
     @property
@@ -97,6 +98,9 @@ class Subcommands:
 
         # TODO: Prevent overwriting 'help'?
         self._commands[name] = handler
+        
+    def set_non_command_handler(self, handler):
+        self._non_command_handler = handler
 
     def __call__(self, argv):
         """Run the subcommand processor and invoke the necessary handler.
@@ -113,7 +117,7 @@ class Subcommands:
 
         command = common_config['<command>']
         if command is None:
-            command = 'help'
+            return self._non_command_handler(common_config)
 
         # Try to find a command handler, defaulting to 'help' if no match it found.
         try:

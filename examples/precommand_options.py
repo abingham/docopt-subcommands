@@ -24,7 +24,7 @@ See '{program} <command> -h' for help on specific commands.
 # Use the `command` decorator to add subcommand functions.
 @command()
 def foo_handler(precommand_args, args):
-    """usage: {program} foo [options] <name>
+    """usage: {program} foo <name>
 
     Apply foo to a name.
     """

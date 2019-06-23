@@ -3,6 +3,7 @@ import sys
 
 
 _commands = []
+_non_command = None
 
 
 def command(name=None):
@@ -12,6 +13,11 @@ def command(name=None):
         _commands.append((name, f))
         return f
     return decorator
+
+
+def non_command(f):
+    global _non_command
+    _non_command = f
 
 
 def main(program=None,
@@ -44,6 +50,9 @@ def main(program=None,
                                doc_template=doc_template)
         for name, handler in _commands:
             commands.add_command(handler, name)
+
+        if _non_command is not None:
+            commands.set_non_command_handler(_non_command)
 
     if argv is None:
         argv = sys.argv[1:]
