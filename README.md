@@ -38,8 +38,7 @@ The basic idea behind `docopt-subcommands` is simple:
     that subcommand.
  3. You register your handler functions with the names of the subcommands which
     will invoke them.
- 4. You provide a program name, version string, and (optionally) a top-level
-    documentation string.
+ 4. You provide a program name and (optionally) a top-level documentation string.
 
 Then `docopt-subcommands` does the work of stitching everything together into a
 subcommand-driven program. Here's how it looks (from the included
@@ -53,7 +52,7 @@ import docopt_subcommands as dsc
 
 # 1. Use the `command` decorator to add subcommands functions.
 @dsc.command()
-def foo_handler(args):
+def foo_handler(precommand_args, args):
     """usage: {program} foo <name>
 
     Apply foo to a name.
@@ -62,7 +61,7 @@ def foo_handler(args):
 
 
 @dsc.command()
-def bar_handler(args):
+def bar_handler(precommand, args):
     """usage: {program} bar <name>
 
     Apply bar to a name.
@@ -72,9 +71,7 @@ def bar_handler(args):
 
 # 2. Pass a program name and version string to `main` to run a program with the
 # subcommands you defined with the decorators above.
-dsc.main(
-    program='docopt-subcommand-example',
-    version='docopt-subcommand-example v42')
+dsc.main(program='docopt-subcommand-example')
 ```
 
 If you run this program at the command line you'll see that you have a nice,
@@ -103,13 +100,58 @@ usage: docopt-subcommand-example foo <name>
 $ python basic_example.py foo -h
 usage: docopt-subcommand-example foo <name>
 
-    Apply foo to a name.
+Apply foo to a name.
 
 $ python basic_example.py foo Bubba
 Foo, Bubba
 ```
 
 For more examples, see the `examples` directory.
+
+## Common options
+
+Many subcommand-based programs have a set of options that are common to all commands. A common example is `--verbose`
+which causes the program to print more information not matter which command is executed. With `docopt_subcommands` you specify these common options in the top-level docstring like this::
+
+  TOP_LEVEL_DOC = """{program}
+
+  Usage: {program} [options] <command> [<args> ...]
+
+  Options:
+    -h --help   Show this screen
+    --verbose   Use verbose output
+
+  Available commands:
+     {available_commands}
+  """
+
+With this docstring, you can provide the `--verbose` flag for any subcommand. Critically, **common options must be provided before the subcommand name.** So if `bar` was a subcommand in your program, you would write::
+
+  my_program --verbose bar
+
+but not::
+
+  my_program bar --verbose
+
+`docopt_subcommands` parses the complete command line in two passes. The first pass parses it with the top-level
+docstring while the second pass uses the docstring for the specific command and only parses the part of the command line
+after the common options. It then provides both of the parsed dicts to the subcommand handler: the first argument to the
+handler is the result of the first pass, and the second argument is the result of the second pass.
+
+With this system, you can then use a single set of code to do "common configuration" for you program. For example,
+here's how a handler might look:
+
+.. code-block:: python
+
+  @dsc.command()
+  def bar_handler(precommand_args, args):
+      """usage: {program} bar <name>
+
+      Apply bar to a name.
+      """
+      handle_common_option(precommand_args)
+      name = args['<name>']
+      print('Bar {}'.format(name))
 
 ## Advanced usage
 
@@ -133,9 +175,7 @@ As an example, here's what the basic example above looks like if you construct a
 import docopt_subcommands as dsc
 import sys
 
-sc = dsc.Subcommands(
-    program='docopt-subcommand-example',
-    version='docopt-subcommand-example v42')
+sc = dsc.Subcommands(program='docopt-subcommand-example')
 
 @sc.command('foo')
 def foo_handler(args):
