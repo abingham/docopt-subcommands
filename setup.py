@@ -12,6 +12,7 @@ setup(name='docopt_subcommands',
       version='4.0.0',
       description='create subcommand-based CLI programs with docopt',
       long_description=README,
+      long_description_content_type="text/markdown",
       license='MIT License',
       classifiers=[
           'Development Status :: 4 - Beta',
